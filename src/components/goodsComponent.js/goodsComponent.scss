@@ -1,0 +1,9 @@
+$grey: rgb(204,204,204);
+
+.goods-block {
+  border-left: 10px solid $grey;
+  border-right: 5px solid $grey;
+  border-bottom: 5px solid $grey;
+  min-width: 300px;
+  flex-grow: 1;
+}
