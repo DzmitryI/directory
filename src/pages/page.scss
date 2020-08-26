@@ -1,0 +1,24 @@
+$light-grey: rgb(245,242,221);
+$grey: rgb(204,204,204);
+
+.folder-page {
+  margin: 0 auto;
+  width: 50%;
+  min-width: 400px;
+  border: 1px solid $grey;
+  border-radius: 5px;
+  background: $light-grey;
+}
+
+.row-group {
+  display: flex;
+  flex-direction: column;
+  margin: 5px 10px 5px;
+}
+
+.btn-group {
+  margin: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
