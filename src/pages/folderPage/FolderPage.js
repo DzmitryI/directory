@@ -1,6 +1,10 @@
-import React from "react";
+import React, {useContext} from "react";
+import {Page} from "../../App";
 
 const FolderPage = () => {
+
+  const {close, save} = useContext(Page);
+
   return (
     <div className="folder-page">
       <div className="row-group">
@@ -16,8 +20,8 @@ const FolderPage = () => {
         <input type="text" id="name-folder"/>
       </div>
       <div className="btn-group">
-        <button className="btn">Save</button>
-        <button className="btn">Close</button>
+        <button className="btn" onClick={(() => save('folder'))}>Save</button>
+        <button className="btn" onClick={(() => close('folder'))}>Close</button>
       </div>
     </div>
   )

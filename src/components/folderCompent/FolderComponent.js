@@ -4,7 +4,7 @@ import HeaderComponent from "../headerComponent";
 const FolderComponent = () => {
   return (
     <div className='folder-block'>
-      <HeaderComponent/>
+      <HeaderComponent  flag='folder'/>
       <ol>
         <li>folder 1</li>
         <li>folder 2</li>

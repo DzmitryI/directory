@@ -4,7 +4,7 @@ import HeaderComponent from "../headerComponent";
 const GoodsComponent = () => {
   return (
     <div className='goods-block'>
-      <HeaderComponent/>
+      <HeaderComponent flag='good'/>
       <ol>
         <li>good 1</li>
         <li>good 2</li>
