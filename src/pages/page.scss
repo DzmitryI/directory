@@ -2,12 +2,16 @@ $light-grey: rgb(245,242,221);
 $grey: rgb(204,204,204);
 
 .folder-page {
-  margin: 0 auto;
-  width: 50%;
-  min-width: 400px;
+  width: 400px;
   border: 1px solid $grey;
   border-radius: 5px;
   background: $light-grey;
+  margin: 0 auto;
+  z-index: 2;
+  position: absolute;
+  top: 30%;
+  left: 0;
+  right: 0;
 }
 
 .row-group {
