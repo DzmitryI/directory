@@ -1,37 +1,92 @@
-import React, { useContext } from 'react';
-import { Page } from '../../App';
+import React, { Component } from 'react';
 import Backdrop from '../../components/backdrop';
+import { clearObjectValue, renderInputs, updateInput } from '../helperPages';
+import Button from "../../components/Button";
 
-const FolderPage = () => {
-  const { close, save } = useContext(Page);
+class FolderPage extends Component {
+  state = {
+    folderInput: {
+      id: {
+        value: '',
+        label: 'id',
+        disabled: true,
+      },
+      parentKey: {
+        value: '',
+        label: 'parentKey',
+        disabled: true,
+      },
+      name: {
+        value: '',
+        label: 'Name',
+      },
+    },
+    folder: {
+      id: '',
+      parentKey: '',
+      name: '',
+    },
+  };
 
-  return (
-    <>
-      <div className='folder-page'>
-        <div className='row-group'>
-          <label htmlFor='id'>Id</label>
-          <input type="text" id="id" />
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const { id, parentKey, name = '' } = nextProps.curFolder;
+    if (id !== prevState.folder.id) {
+      const folderInput = updateInput(prevState.folderInput, { id, parentKey, name });
+      return {
+        folder: {
+          ...prevState.folder,
+          id,
+          parentKey,
+          name,
+        },
+        folderInput,
+      };
+    }
+    return {
+      prevState,
+    };
+  }
+
+  btnSaveClick = () => {
+    const { onSaveFolderClick, changeStatusPage } = this.props;
+    onSaveFolderClick(this.state.folder);
+    changeStatusPage('folder', false);
+  };
+
+  btnCloseClick = () => {
+    const { changeStatusPage } = this.props;
+    const { folderInput } = this.state;
+    const folderInputClear = clearObjectValue(folderInput);
+    this.setState({ folderInput: folderInputClear });
+    changeStatusPage('folder', false);
+  };
+
+  onHandleInput = (controlName) => (event) => {
+    this.handleInput(event, controlName);
+  };
+
+  handleInput = ({ target: { value } }, controlName) => {
+    const { folderInput, folder } = this.state;
+    folderInput[controlName].value = value;
+    folder[controlName] = value;
+    this.setState({ folderInput, folder });
+  };
+
+  render() {
+    const { folderInput } = this.state;
+    return (
+      <>
+        <div className='folder-page'>
+          {renderInputs(folderInput, this.onHandleInput)}
+          <div className='btn-group'>
+            <Button name='Save' onClick={this.btnSaveClick} />
+            <Button name='Close' onClick={this.btnCloseClick} />
+          </div>
         </div>
-        <div className='row-group'>
-          <label htmlFor='parent-key-folder'>Parent key</label>
-          <input type='text' id='parent-key-folder' />
-        </div>
-        <div className='row-group'>
-          <label htmlFor='name-folder'>Name</label>
-          <input type='text' id='name-folder' />
-        </div>
-        <div className='btn-group'>
-          <button className='btn' onClick={() => save('folder')}>
-            Save
-          </button>
-          <button className='btn' onClick={() => close('folder')}>
-            Close
-          </button>
-        </div>
-      </div>
-      <Backdrop flag='folder' />
-    </>
-  );
-};
+        <Backdrop flag='folder' />
+      </>
+    );
+  }
+}
 
 export default FolderPage;

@@ -1,22 +1,12 @@
-import React, { useContext } from 'react';
-import { Page } from '../../App';
+import React from 'react';
+import Button from '../Button';
 
-const HeaderComponent = ({ flag }) => {
-  const { add, rename, remove } = useContext(Page);
-
-  return (
-    <div className='header-component'>
-      <button className="btn" onClick={() => add(flag)}>
-        add
-      </button>
-      <button className="btn" onClick={() => rename(flag)}>
-        rename
-      </button>
-      <button className="btn" onClick={remove}>
-        remove
-      </button>
-    </div>
-  );
-};
+const HeaderComponent = ({ add, rename, remove, className, disabled }) => (
+  <div className='header-component'>
+    <Button name='Add' className={className} disabled={disabled} onClick={add} />
+    <Button name='Rename' className={className} disabled={disabled} onClick={rename} />
+    <Button name='Remove' className={className} disabled={disabled} onClick={remove} />
+  </div>
+);
 
 export default HeaderComponent;

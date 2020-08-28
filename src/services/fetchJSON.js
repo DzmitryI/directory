@@ -1,0 +1,1 @@
+import goodgroupJSON from './assets/bases/goodgroups.json';

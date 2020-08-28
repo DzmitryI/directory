@@ -14,5 +14,5 @@ code {
 }
 
 main {
-  height: 100vh;
+  display: flex;
 }
