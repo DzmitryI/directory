@@ -20,10 +20,12 @@ table {
     cursor: pointer;
     background-color: $light-grey;
   }
+  & th:first-child,
   & td:first-child {
     width: 50px;
     text-align: center;
   }
+  & th:last-child,
   & td:last-child {
     width: 70px;
     text-align: center;
