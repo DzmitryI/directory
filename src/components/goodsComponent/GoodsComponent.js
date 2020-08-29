@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import HeaderComponent from '../headerComponent';
 import { getLastId } from '../helpersComponent';
 
@@ -7,7 +8,7 @@ class GoodsComponent extends Component {
     goodGroup: [],
     prevTrId: '',
     curTrId: '',
-    disabled: true,
+    disabled: false,
     lastIdGood: '',
   };
 
@@ -18,27 +19,29 @@ class GoodsComponent extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { isGoodPage, value, value: goodGroup, goodBaseFull, curFolderId } = this.props;
+    const { isGoodPage, value: goodGroup, goodBaseFull, curFolderId } = this.props;
     const { prevTrId } = this.state;
-    if ((!isGoodPage && prevProps.isGoodPage !== isGoodPage) || prevProps.value.length !== value.length) {
+    if ((!isGoodPage && prevProps.isGoodPage !== isGoodPage) || prevProps.value.length !== goodGroup.length) {
       const lastIdGood = getLastId(goodBaseFull);
       this.setState({ goodGroup, lastIdGood });
-    };
+    }
     if (prevProps.curFolderId !== curFolderId && prevTrId) {
-      console.log('change group');
       const prevTr = document.getElementById(prevTrId);
       if (prevTr) {
         prevTr.classList.toggle('active-good');
         this.setState({ prevTrId: '' });
       }
     }
-  };
+  }
 
   addGood = () => {
-    const { changeStatusPage, onChangeGoodClick, curFolderId } = this.props;
+    const { changeStatusPage, onChangeClick, curFolderId } = this.props;
     const { lastIdGood, prevTrId } = this.state;
+    if (!curFolderId) {
+      return alert('You need to chose any group');
+    }
     changeStatusPage('good', true);
-    onChangeGoodClick({ id: lastIdGood + 1, groupKey: curFolderId }, true);
+    onChangeClick({ id: lastIdGood + 1, groupKey: curFolderId }, 'good', true);
     if (prevTrId) {
       const prevTr = document.getElementById(prevTrId);
       if (prevTr) {
@@ -50,7 +53,10 @@ class GoodsComponent extends Component {
 
   renameGood = () => {
     const { goodGroup, curTrId, prevTrId } = this.state;
-    const { changeStatusPage, onChangeGoodClick } = this.props;
+    const { changeStatusPage, onChangeClick } = this.props;
+    if (!curTrId) {
+      return alert('You need to chose any good');
+    }
     changeStatusPage('good', true);
     if (prevTrId) {
       const prevTr = document.getElementById(prevTrId);
@@ -60,13 +66,17 @@ class GoodsComponent extends Component {
     }
     this.setState({ prevTrId: '', curTrId: '' });
     const good = goodGroup.filter((curGood) => String(curGood.id) === curTrId);
-    onChangeGoodClick(...good);
+    onChangeClick(...good, 'good');
   };
 
   removeGood = () => {
     const { curFolderId, onRemoveGoodClick } = this.props;
     const { curTrId } = this.state;
+    if (!curTrId) {
+      return alert('You need to chose any good');
+    }
     onRemoveGoodClick(curTrId, curFolderId);
+    this.setState({ prevTrId: '', curTrId: '' });
   };
 
   onClickGood = (event) => {
@@ -120,5 +130,15 @@ class GoodsComponent extends Component {
     );
   }
 }
+
+GoodsComponent.propTypes = {
+  value: PropTypes.array.isRequired,
+  changeStatusPage: PropTypes.func.isRequired,
+  onChangeClick: PropTypes.func.isRequired,
+  onRemoveGoodClick: PropTypes.func.isRequired,
+  curFolderId: PropTypes.string.isRequired,
+  goodBaseFull: PropTypes.array.isRequired,
+  isGoodPage: PropTypes.bool.isRequired,
+};
 
 export default GoodsComponent;

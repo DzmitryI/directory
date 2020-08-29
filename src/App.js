@@ -4,10 +4,10 @@ import FolderPages from './pages/folderPage';
 import GoodsComponent from './components/goodsComponent';
 import GoodPage from './pages/goodPage';
 import Header from './components/header';
+import { removeTree } from './components/helpersComponent';
 
 import goodGroupJSON from './assets/bases/goodgroups.json';
 import goodJSON from './assets/bases/goods.json';
-import { removeTree } from "./components/helpersComponent";
 
 function App() {
   const [goodGroupBase, setGoodGroupBase] = useState(goodGroupJSON);
@@ -32,53 +32,50 @@ function App() {
     }
   };
 
-  const onChangeFolderClick = (folder = {}, status = false) => {
-    setCurFolder(folder);
-    setStatusNewFolder(status);
-  };
-  const onChangeGoodClick = (good = {}, status = false) => {
-    setCurGood(good);
-    setStatusNewGood(status);
+  const onChangeClick = (obj = {}, flag, status = false) => {
+    if (flag === 'folder') {
+      setCurFolder(obj);
+      setStatusNewFolder(status);
+    } else {
+      setCurGood(obj);
+      setStatusNewGood(status);
+    }
   };
 
   const onSaveFolderClick = (folder) => {
     const goodGroup = goodGroupBase;
     if (statusNewFolder) {
       goodGroup.push(folder);
-      setGoodGroupBase(goodGroup);
     } else {
-      const index = goodGroup.findIndex((curFolder) => curFolder.id === folder.id);
+      const index = goodGroup.findIndex((curGoodFolder) => curGoodFolder.id === folder.id);
       goodGroup[index] = folder;
-      setGoodGroupBase(goodGroup);
     }
+    setGoodGroupBase(goodGroup);
   };
   const onSaveGoodClick = (good) => {
     const goodGroup = goodBaseFull;
     if (statusNewGood) {
       goodGroup.push(good);
-      const goods = goodGroup.filter((curGood) => String(curGood.groupKey) === good.groupKey);
-      setGoodBase(goods);
-      setGoodBaseFull(goodGroup);
     } else {
       const index = goodGroup.findIndex((curGood) => curGood.id === good.id);
       goodGroup[index] = good;
-      const goods = goodGroup.filter((curGood) => curGood.groupKey === good.groupKey);
-      setGoodBase(goods);
-      setGoodBaseFull(goodGroup);
     }
+    const goods = goodGroup.filter((curGood) => String(curGood.groupKey) === String(good.groupKey));
+    setGoodBase(goods);
+    setGoodBaseFull(goodGroup);
   };
 
   const onRemoveFolderClick = (id, curFolder) => {
     const arrRemoveFolders = removeTree(goodGroupBase, { id }, curFolder);
     goodGroupBase.map((goodGroup) => delete goodGroup.children);
-    const folder = goodGroupBase.filter( ( curFolder ) => (arrRemoveFolders.findIndex( (removeFolder ) => removeFolder.id === curFolder.id) === -1));
+    const folder = goodGroupBase.filter((curFolder) => (arrRemoveFolders.findIndex( (removeFolder ) => removeFolder.id === curFolder.id) === -1));
     setGoodGroupBase(folder);
     const goodGroup = goodBaseFull.filter((curGood) => (arrRemoveFolders.findIndex( (removeFolder ) => removeFolder.id === curGood.groupKey) === -1) );
     setGoodBaseFull(goodGroup);
   };
 
   const onRemoveGoodClick = (id, groupKey) => {
-    const goodGroup = goodBaseFull.filter((curGood) => String(curGood.id) !== id );
+    const goodGroup = goodBaseFull.filter((curGood) => String(curGood.id) !== id);
     setGoodBaseFull(goodGroup);
     const goods = goodGroup.filter((curGood) => String(curGood.groupKey) === groupKey);
     setGoodBase(goods);
@@ -91,14 +88,14 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <div className='App'>
       <Header />
       <main>
         <FolderComponent
           value={goodGroupBase}
           isFolderPage={isFolderPage}
           changeStatusPage={changeStatusPage}
-          onChangeFolderClick={onChangeFolderClick}
+          onChangeClick={onChangeClick}
           onRemoveFolderClick={onRemoveFolderClick}
           onFolderClick={onFolderClick}
         />
@@ -108,7 +105,7 @@ function App() {
           isGoodPage={isGoodPage}
           curFolderId={curFolderId}
           changeStatusPage={changeStatusPage}
-          onChangeGoodClick={onChangeGoodClick}
+          onChangeClick={onChangeClick}
           onRemoveGoodClick={onRemoveGoodClick}
         />
       </main>
@@ -127,7 +124,7 @@ function App() {
           changeStatusPage={changeStatusPage}
           onSaveGoodClick={onSaveGoodClick}
         />
-        )}
+      )}
     </div>
   );
 }

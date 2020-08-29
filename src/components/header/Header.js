@@ -1,5 +1,5 @@
 import React from 'react';
 
-const Header = () => <div className='header'>Directory</div>;
+const Header = () => <div className='header'><span>Directory</span></div>;
 
 export default Header;

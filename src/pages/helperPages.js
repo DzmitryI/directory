@@ -4,7 +4,16 @@ import Input from '../components/Input';
 function renderInputs(inputs, onChange) {
   return Object.keys(inputs).map((curName) => {
     const { label, value, disabled = false } = inputs[curName];
-    return <Input id={curName} value={value} disabled={disabled} label={label} onChange={onChange(curName)} />;
+    return (
+      <Input
+        id={curName}
+        key={curName}
+        value={value}
+        disabled={disabled}
+        label={label}
+        onChange={onChange(curName)}
+      />
+    );
   });
 }
 

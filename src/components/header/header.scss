@@ -1,7 +1,10 @@
 $grey: rgb(204,204,204);
 
 .header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   background: $grey;
   height: 40px;
-  text-align: center;
 }

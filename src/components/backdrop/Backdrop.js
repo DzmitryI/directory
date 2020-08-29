@@ -1,8 +1,5 @@
 import React from 'react';
 
-const Backdrop = ({ flag }) => {
-
-  return <div className="backdrop" />;
-};
+const Backdrop = () => <div className='backdrop' />;
 
 export default Backdrop;

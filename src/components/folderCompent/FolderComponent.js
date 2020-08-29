@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import HeaderComponent from '../headerComponent';
 import { buildTree, getLastId } from '../helpersComponent';
 import ListItem from '../listItem';
@@ -32,25 +33,28 @@ class FolderComponent extends Component {
   }
 
   addFolder = () => {
-    const { changeStatusPage, onChangeFolderClick } = this.props;
+    const { changeStatusPage, onChangeClick } = this.props;
     const { lastIdGroup, folderGroup, curLiId } = this.state;
     changeStatusPage('folder', true);
     const [folder] = folderGroup.filter((curFolder) => String(curFolder.id) === curLiId);
-    onChangeFolderClick({ id: lastIdGroup + 1, parentKey: folder.id }, true);
+    onChangeClick({ id: lastIdGroup + 1, parentKey: folder.id }, 'folder', true);
     this.setState({ lastIdGroup: lastIdGroup + 1 });
   };
 
   renameFolder = () => {
     const { folderGroup, curLiId } = this.state;
-    const { changeStatusPage, onChangeFolderClick } = this.props;
+    const { changeStatusPage, onChangeClick } = this.props;
     changeStatusPage('folder', true);
     const folder = folderGroup.filter((curFolder) => String(curFolder.id) === curLiId);
-    onChangeFolderClick(...folder);
+    onChangeClick(...folder, 'folder');
   };
 
   removeFolder = () => {
     const { curLiId, folderGroup } = this.state;
     const { onRemoveFolderClick } = this.props;
+    if (curLiId === '2000') {
+      return alert('You can\'t delete root folder');
+    }
     const folder = folderGroup.filter((curFolder) => String(curFolder.id) === curLiId);
     onRemoveFolderClick(curLiId, folder);
   };
@@ -94,5 +98,14 @@ class FolderComponent extends Component {
     );
   }
 }
+
+FolderComponent.propTypes = {
+  value: PropTypes.array.isRequired,
+  isFolderPage: PropTypes.bool.isRequired,
+  changeStatusPage: PropTypes.func.isRequired,
+  onChangeClick: PropTypes.func.isRequired,
+  onRemoveFolderClick: PropTypes.func.isRequired,
+  onFolderClick: PropTypes.func.isRequired,
+};
 
 export default FolderComponent;

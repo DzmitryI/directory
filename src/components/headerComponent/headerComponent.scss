@@ -1,5 +1,6 @@
 $grey: rgb(204,204,204);
 $light-grey: rgb(245,242,221);
+$black: rgb(0,0,0);
 
 .header-component {
   width: auto;
@@ -9,7 +10,7 @@ $light-grey: rgb(245,242,221);
 
 .folder-group {
   width: auto;
-  border: 1px solid black;
+  border: 1px solid $black;
   text-align: center;
   font-weight: bold;
   background: $grey;

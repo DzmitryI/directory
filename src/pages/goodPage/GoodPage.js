@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Backdrop from '../../components/backdrop';
 import { clearObjectValue, renderInputs, updateInput } from '../helperPages';
-import Button from "../../components/Button";
+import Button from '../../components/Button';
 
 class GoodPage extends Component {
   state = {
@@ -88,5 +89,10 @@ class GoodPage extends Component {
     );
   }
 }
+
+GoodPage.propTypes = {
+  onSaveGoodClick: PropTypes.func.isRequired,
+  changeStatusPage: PropTypes.func.isRequired,
+};
 
 export default GoodPage;
