@@ -1,4 +1,6 @@
 $grey: rgb(204,204,204);
+$light-grey: rgb(245,242,221);
+$light-orange: rgb(250,219,31);
 
 .goods-block {
   border-left: 10px solid $grey;
@@ -6,4 +8,22 @@ $grey: rgb(204,204,204);
   border-bottom: 5px solid $grey;
   min-width: 300px;
   flex-grow: 1;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  & th {
+    background-color: $grey;
+
+  }
+  & tr:hover {
+    cursor: pointer;
+    background-color: $light-grey;
+  }
+}
+
+.active-good {
+  margin-right: 5px;
+  background: $light-orange;
 }

@@ -1,37 +1,92 @@
-import React, { useContext } from 'react';
-import { Page } from '../../App';
+import React, { Component } from 'react';
 import Backdrop from '../../components/backdrop';
+import { clearObjectValue, renderInputs, updateInput } from '../helperPages';
+import Button from "../../components/Button";
 
-const GoodPage = () => {
-  const { close, save } = useContext(Page);
+class GoodPage extends Component {
+  state = {
+    goodInput: {
+      id: {
+        value: '',
+        label: 'id',
+        disabled: true,
+      },
+      groupKey: {
+        value: '',
+        label: 'groupKey',
+        disabled: true,
+      },
+      name: {
+        value: '',
+        label: 'Name',
+      },
+    },
+    good: {
+      id: '',
+      groupKey: '',
+      name: '',
+    },
+  };
 
-  return (
-    <>
-      <div className='folder-page'>
-        <div className='row-group'>
-          <label htmlFor='id'>Id</label>
-          <input type='text' id='id' />
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const { id, groupKey, name = '' } = nextProps.curGood;
+    if (id !== prevState.good.id) {
+      const goodInput = updateInput(prevState.goodInput, { id, groupKey, name });
+      return {
+        good: {
+          ...prevState.good,
+          id,
+          groupKey,
+          name,
+        },
+        goodInput,
+      };
+    }
+    return {
+      prevState,
+    };
+  }
+
+  btnSaveClick = () => {
+    const { onSaveGoodClick, changeStatusPage } = this.props;
+    onSaveGoodClick(this.state.good);
+    changeStatusPage('good', false);
+  };
+
+  btnCloseClick = () => {
+    const { changeStatusPage } = this.props;
+    const { goodInput } = this.state;
+    const goodInputClear = clearObjectValue(goodInput);
+    this.setState({ goodInput: goodInputClear });
+    changeStatusPage('good', false);
+  };
+
+  onHandleInput = (controlName) => (event) => {
+    this.handleInput(event, controlName);
+  };
+
+  handleInput = ({ target: { value } }, controlName) => {
+    const { goodInput, good } = this.state;
+    goodInput[controlName].value = value;
+    good[controlName] = value;
+    this.setState({ goodInput, good });
+  };
+
+  render() {
+    const { goodInput } = this.state;
+    return (
+      <>
+        <div className='good-page'>
+          {renderInputs(goodInput, this.onHandleInput)}
+          <div className='btn-group'>
+            <Button name='Save' onClick={this.btnSaveClick} />
+            <Button name='Close' onClick={this.btnCloseClick} />
+          </div>
         </div>
-        <div className='row-group'>
-          <label htmlFor='group-key-good'>Group key</label>
-          <input type='text' id='group-key-good' />
-        </div>
-        <div className='row-group'>
-          <label htmlFor='name-folder'>Name</label>
-          <input type='text' id='name-folder' />
-        </div>
-        <div className='btn-group'>
-          <button className='btn' onClick={() => save('good')}>
-            Save
-          </button>
-          <button className='btn' onClick={() => close('good')}>
-            Close
-          </button>
-        </div>
-      </div>
-      <Backdrop flag='good' />
-    </>
-  );
-};
+        <Backdrop flag='good' />
+      </>
+    );
+  }
+}
 
 export default GoodPage;

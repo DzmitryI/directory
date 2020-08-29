@@ -49,18 +49,23 @@ class FolderComponent extends Component {
   };
 
   removeFolder = () => {
-    const { curLiId } = this.state;
+    const { curLiId, folderGroup } = this.state;
     const { onRemoveFolderClick } = this.props;
-    onRemoveFolderClick(curLiId);
+    const folder = folderGroup.filter((curFolder) => String(curFolder.id) === curLiId);
+    onRemoveFolderClick(curLiId, folder);
   };
 
   onClickFolder = (event) => {
+    const { onFolderClick } = this.props;
     const { prevDivId } = this.state;
     const currentLi = document.getElementById(event.target.closest('li').id);
     if (prevDivId) {
       const prevLi = document.getElementById(prevDivId);
-      prevLi.classList.toggle('active');
+      if (prevLi) {
+        prevLi.classList.toggle('active');
+      }
     }
+    onFolderClick(currentLi.id);
     this.setState({ prevDivId: event.target.id, curLiId: event.target.closest('li').id, disabled: false });
     currentLi.classList.toggle('expandClose');
     currentLi.classList.toggle('expandOpen');
@@ -79,6 +84,7 @@ class FolderComponent extends Component {
           className='btn-folder'
           disabled={disabled}
         />
+        <div className='folder-group'>Name</div>
         <ul className='container root'>
           {tree.map((i) => (
             <ListItem item={i} key={i.id} click={this.onClickFolder} />

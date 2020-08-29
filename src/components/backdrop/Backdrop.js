@@ -1,10 +1,8 @@
-import React, { useContext } from 'react';
-import { Page } from '../../App';
+import React from 'react';
 
 const Backdrop = ({ flag }) => {
-  const { close } = useContext(Page);
 
-  return <div className="backdrop" onClick={() => close(flag)} />;
+  return <div className="backdrop" />;
 };
 
 export default Backdrop;
